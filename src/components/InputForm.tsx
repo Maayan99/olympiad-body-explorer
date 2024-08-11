@@ -71,16 +71,17 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
                     id="wingspan"
                     min={140}
                     max={230}
-                    value={wingspan}
+                    value={knowWingspan ? wingspan : 140}
                     onChange={(e) => setWingspan(Number(e.target.value))}
                     className={`w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer ${
                         !knowWingspan ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                     disabled={!knowWingspan}
+                    style={{ WebkitAppearance: !knowWingspan ? 'none' : 'slider-horizontal' }}
                 />
                 <div className="flex justify-between text-sm text-gray-600 mt-1">
                     <span>140</span>
-                    <span className="font-medium">{wingspan}</span>
+                    <span className="font-medium">{knowWingspan ? wingspan : '-'}</span>
                     <span>230</span>
                 </div>
             </div>
