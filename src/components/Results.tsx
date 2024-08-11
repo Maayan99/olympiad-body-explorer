@@ -187,8 +187,8 @@ export default function Results({ measurements }: ResultsProps) {
                         <SocialShare
                             url={shareUrl}
                             title={shareTitle}
-                            sport={topSport2024?.name || 'Unknown'}
-                            compatibility={topSport2024?.compatibility || 0}
+                            sport={topSport2024?.sport.name || 'Unknown'}
+                            compatibility={topSport2024?.compatibility * 100 || 0}
                         />
                     </div>
                 </div>
