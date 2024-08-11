@@ -1,9 +1,12 @@
-// components/Results.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 import { UserMeasurements, SportData } from '../utils/types';
 import { calculateCompatibility } from '../utils/calculations';
+import SocialShare from './SocialShare';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface ResultsProps {
     measurements: UserMeasurements;
@@ -35,52 +38,84 @@ export default function Results({ measurements }: ResultsProps) {
             {
                 label: 'Your Measurements',
                 data: [{ x: measurements.height, y: measurements.weight }],
-                backgroundColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(0, 129, 200, 1)', // Olympic blue
             },
-            ...compatibleSports.map((sport) => ({
+            ...compatibleSports.map((sport, index) => ({
                 label: sport.sport.name,
                 data: [{ x: sport.sport.averageHeight, y: sport.sport.averageWeight }],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                backgroundColor: `rgba(${index * 50}, 129, 200, 0.7)`,
             })),
         ],
     };
+
+    const scatterOptions = {
+        scales: {
+            x: {
+                type: 'linear' as const,
+                position: 'bottom' as const,
+                title: {
+                    display: true,
+                    text: 'Height (cm)',
+                },
+            },
+            y: {
+                type: 'linear' as const,
+                position: 'left' as const,
+                title: {
+                    display: true,
+                    text: 'Weight (kg)',
+                },
+            },
+        },
+    };
+
+    const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const shareTitle = `Check out my Olympic body type match! My top sport is ${compatibleSports[0]?.sport.name}`;
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mt-8"
+            className="mt-8 bg-white rounded-lg shadow-lg p-6"
         >
-            <h2 className="text-2xl font-bold mb-4">Your Results</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center text-olympic-blue">Your Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                    <h3 className="text-xl font-semibold mb-2">Top 5 Compatible Sports</h3>
+                    <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Top 5 Compatible Sports</h3>
                     <ul>
-                        {compatibleSports.map(({ sport, compatibility }) => (
+                        {compatibleSports.map(({ sport, compatibility }, index) => (
                             <motion.li
                                 key={sport.name}
-                                className="mb-2 p-2 bg-white rounded-md shadow-sm"
+                                className="mb-4 p-4 bg-gray-50 rounded-md shadow-sm"
                                 whileHover={{ scale: 1.05 }}
+                                initial={{ opacity: 0, x: -50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }}
                             >
-                                <span className="font-medium">{sport.name}</span>:{' '}
-                                {(compatibility * 100).toFixed(2)}% compatible
+                                <span className="font-medium text-lg">{sport.name}</span>
+                                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                    <motion.div
+                                        className="bg-olympic-blue h-2.5 rounded-full"
+                                        style={{ width: `${compatibility * 100}%` }}
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${compatibility * 100}%` }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                    ></motion.div>
+                                </div>
+                                <span className="text-sm text-gray-600">{(compatibility * 100).toFixed(2)}% compatible</span>
                             </motion.li>
                         ))}
                     </ul>
                 </div>
                 <div>
-                    <h3 className="text-xl font-semibold mb-2">Height vs Weight Comparison</h3>
-                    <Scatter
-                        data={scatterData}
-                        options={{
-                            scales: {
-                                x: { title: { display: true, text: 'Height (cm)' } },
-                                y: { title: { display: true, text: 'Weight (kg)' } },
-                            },
-                        }}
-                    />
+                    <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Height vs Weight Comparison</h3>
+                    <Scatter data={scatterData} options={scatterOptions} />
                 </div>
+            </div>
+            <div className="mt-8">
+                <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Share Your Results</h3>
+                <SocialShare url={shareUrl} title={shareTitle} />
             </div>
         </motion.div>
     );
