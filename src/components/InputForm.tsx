@@ -11,10 +11,11 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
     const [height, setHeight] = useState(170);
     const [weight, setWeight] = useState(70);
     const [wingspan, setWingspan] = useState(170);
+    const [knowWingspan, setKnowWingspan] = useState(true);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ height, weight, wingspan });
+        onSubmit({ height, weight, wingspan: knowWingspan ? wingspan : undefined });
     };
 
     return (
@@ -29,7 +30,6 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
             {[
                 { label: 'Height', value: height, setValue: setHeight, min: 140, max: 220, unit: 'cm' },
                 { label: 'Weight', value: weight, setValue: setWeight, min: 40, max: 150, unit: 'kg' },
-                { label: 'Wingspan', value: wingspan, setValue: setWingspan, min: 140, max: 230, unit: 'cm' },
             ].map((field) => (
                 <div key={field.label} className="mb-6">
                     <label htmlFor={field.label.toLowerCase()} className="block text-sm font-medium text-gray-700 mb-2">
@@ -51,6 +51,39 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
                     </div>
                 </div>
             ))}
+            <div className="mb-6">
+                <div className="flex items-center justify-between">
+                    <label htmlFor="wingspan" className="block text-sm font-medium text-gray-700 mb-2">
+                        Wingspan (cm)
+                    </label>
+                    <label className="inline-flex items-center">
+                        <input
+                            type="checkbox"
+                            checked={knowWingspan}
+                            onChange={(e) => setKnowWingspan(e.target.checked)}
+                            className="form-checkbox h-5 w-5 text-olympic-blue"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">I know my wingspan</span>
+                    </label>
+                </div>
+                <input
+                    type="range"
+                    id="wingspan"
+                    min={140}
+                    max={230}
+                    value={wingspan}
+                    onChange={(e) => setWingspan(Number(e.target.value))}
+                    className={`w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer ${
+                        !knowWingspan ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                    disabled={!knowWingspan}
+                />
+                <div className="flex justify-between text-sm text-gray-600 mt-1">
+                    <span>140</span>
+                    <span className="font-medium">{wingspan}</span>
+                    <span>230</span>
+                </div>
+            </div>
             <motion.button
                 type="submit"
                 className="w-full bg-olympic-blue text-white py-2 px-4 rounded-md hover:bg-olympic-yellow hover:text-olympic-blue transition-colors"
