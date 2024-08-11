@@ -118,7 +118,7 @@ export default function Results({ measurements }: ResultsProps) {
     const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
     const shareTitle = `Check out my Olympic body type match for ${selectedYear}!`;
 
-    const topSport2024 = compatibleSports.find(sport => sport.year === 2024)?.sports[0];
+    const topSport2024 = compatibleSports[0];
 
     return (
         <motion.div
