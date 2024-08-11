@@ -6,7 +6,7 @@ import { Scatter } from 'react-chartjs-2';
 import { UserMeasurements, SportData } from '../utils/types';
 import { calculateCompatibility } from '../utils/calculations';
 import SocialShare from './SocialShare';
-import AnimatedSilhouette from './AnimatedSilhouette';
+import AnimatedSilhouette from './AnimatedSilhoutte';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 

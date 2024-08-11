@@ -20,45 +20,39 @@ const AnimatedSilhouette: React.FC<AnimatedSilhouetteProps> = ({ measurements })
         const drawSilhouette = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Calculate proportions
-            const headSize = canvas.height * 0.15;
-            const shoulderWidth = canvas.width * 0.3;
-            const torsoHeight = (measurements.height / 200) * canvas.height * 0.4;
-            const legHeight = (measurements.height / 200) * canvas.height * 0.45;
-            const armLength = measurements.wingspan
-                ? ((measurements.wingspan / 2) / 200) * canvas.width * 0.8
-                : shoulderWidth * 1.2;
+            const scale = canvas.height / 200; // Assume 200cm is full height
+            const headSize = 20 * scale;
+            const shoulderWidth = measurements.wingspan ? measurements.wingspan * scale : 50 * scale;
+            const torsoHeight = 60 * scale;
+            const legHeight = (measurements.height - 60) * scale;
 
-            ctx.fillStyle = '#0081C8'; // Olympic blue
-            ctx.strokeStyle = '#0081C8';
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#0081C8'; // Olympic blue
+            ctx.lineWidth = 2 * scale;
+            ctx.lineCap = 'round';
 
             // Draw head
             ctx.beginPath();
-            ctx.arc(canvas.width / 2, headSize / 2 + 10, headSize / 2, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.arc(canvas.width / 2, headSize / 2 + 5 * scale, headSize / 2, 0, Math.PI * 2);
+            ctx.stroke();
 
             // Draw body
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - shoulderWidth / 2, headSize);
-            ctx.lineTo(canvas.width / 2 + shoulderWidth / 2, headSize);
-            ctx.lineTo(canvas.width / 2 + shoulderWidth / 4, headSize + torsoHeight);
-            ctx.lineTo(canvas.width / 2 - shoulderWidth / 4, headSize + torsoHeight);
-            ctx.closePath();
-            ctx.fill();
-
-            // Draw legs
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - shoulderWidth / 4, headSize + torsoHeight);
-            ctx.lineTo(canvas.width / 2 - shoulderWidth / 4, canvas.height);
-            ctx.moveTo(canvas.width / 2 + shoulderWidth / 4, headSize + torsoHeight);
-            ctx.lineTo(canvas.width / 2 + shoulderWidth / 4, canvas.height);
+            ctx.moveTo(canvas.width / 2, headSize);
+            ctx.lineTo(canvas.width / 2, headSize + torsoHeight);
             ctx.stroke();
 
             // Draw arms
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - armLength, headSize + torsoHeight * 0.2);
-            ctx.lineTo(canvas.width / 2 + armLength, headSize + torsoHeight * 0.2);
+            ctx.moveTo(canvas.width / 2 - shoulderWidth / 2, headSize + 15 * scale);
+            ctx.lineTo(canvas.width / 2 + shoulderWidth / 2, headSize + 15 * scale);
+            ctx.stroke();
+
+            // Draw legs
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, headSize + torsoHeight);
+            ctx.lineTo(canvas.width / 2 - 15 * scale, canvas.height);
+            ctx.moveTo(canvas.width / 2, headSize + torsoHeight);
+            ctx.lineTo(canvas.width / 2 + 15 * scale, canvas.height);
             ctx.stroke();
         };
 
@@ -70,13 +64,13 @@ const AnimatedSilhouette: React.FC<AnimatedSilhouetteProps> = ({ measurements })
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full max-w-md mx-auto"
+            className="w-full h-full"
         >
             <canvas
                 ref={canvasRef}
-                width={300}
-                height={500}
-                className="w-full h-auto border border-gray-300 rounded-lg"
+                width={200}
+                height={400}
+                className="w-full h-full border border-gray-300 rounded-lg"
             />
         </motion.div>
     );
