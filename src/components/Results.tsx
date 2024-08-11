@@ -36,7 +36,7 @@ const historicalData: HistoricalData[] = [
         sports: [
             { name: 'Athletics', averageHeight: 180, averageWeight: 74, averageWingspan: 185 },
             { name: 'Gymnastics', averageHeight: 160, averageWeight: 52, averageWingspan: 165 },
-            { name: 'Swimming', areHeight: 185, averageWeight: 78, averageWingspan: 192 },
+            { name: 'Swimming', averageHeight: 185, averageWeight: 78, averageWingspan: 192 },
         ],
     },
     // ... you can add more historical data as needed
