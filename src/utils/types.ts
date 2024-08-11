@@ -1,7 +1,9 @@
+// utils/types.ts
+
 export interface UserMeasurements {
     height: number;
     weight: number;
-    wingspan: number;
+    wingspan?: number;
 }
 
 export interface SportData {
@@ -9,7 +11,12 @@ export interface SportData {
     averageHeight: number;
     averageWeight: number;
     averageWingspan: number;
-    averageAge: number;
-    averageBodyFat: number;
-    notableAttributes: string[];
+    averageAge?: number;
+    averageBodyFat?: number;
+    notableAttributes?: string[];
+}
+
+export interface HistoricalData {
+    year: number;
+    sports: SportData[];
 }

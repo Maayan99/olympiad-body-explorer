@@ -26,10 +26,10 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-center justify-center">
             <motion.form
                 onSubmit={handleSubmit}
-                className="flex-1 max-w-md mx-auto bg-white rounded-lg shadow-lg p-6"
+                className="w-full max-w-md bg-white rounded-lg shadow-lg p-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -102,7 +102,7 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
                     Analyze My Body Type
                 </motion.button>
             </motion.form>
-            <div className="flex-1 max-w-md mx-auto">
+            <div className="flex-shrink-0">
                 <AnimatedSilhouette measurements={currentMeasurements} />
             </div>
         </div>
