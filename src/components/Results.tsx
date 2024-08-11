@@ -1,3 +1,4 @@
+// components/Results.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -30,7 +31,7 @@ export default function Results({ measurements }: ResultsProps) {
     }, [measurements]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="text-center">Loading...</div>;
     }
 
     const scatterData = {
@@ -70,7 +71,8 @@ export default function Results({ measurements }: ResultsProps) {
     };
 
     const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const shareTitle = `Check out my Olympic body type match! My top sport is ${compatibleSports[0]?.sport.name}`;
+    const shareTitle = `I'm ${(compatibleSports[0].compatibility * 100).toFixed(2)}% compatible with ${compatibleSports[0].sport.name} in the Olympics! Check your match:`;
+    const shareImage = `/api/og?sport=${encodeURIComponent(compatibleSports[0].sport.name)}&compatibility=${(compatibleSports[0].compatibility * 100).toFixed(2)}`;
 
     return (
         <motion.div
@@ -114,8 +116,8 @@ export default function Results({ measurements }: ResultsProps) {
                 </div>
             </div>
             <div className="mt-8">
-                <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Share Your Results</h3>
-                <SocialShare url={shareUrl} title={shareTitle} />
+                <h3 className="text-2xl font-semibold mb-4 text-center text-olympic-blue">Share Your Results</h3>
+                <SocialShare url={shareUrl} title={shareTitle} image={shareImage} />
             </div>
         </motion.div>
     );
