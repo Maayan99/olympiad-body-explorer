@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import InputForm from '../components/InputForm';
 import Results from '../components/Results';
-import { UserMeasurements } from '../utils/types';
+import { UserMeasurements } from '@/utils/types';
 
 export default function Home() {
   const [measurements, setMeasurements] = useState<UserMeasurements | null>(null);
