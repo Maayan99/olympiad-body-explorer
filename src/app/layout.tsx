@@ -1,6 +1,7 @@
 // app/layout.tsx
 import './globals.css';
 import { Poppins } from 'next/font/google';
+import { Analytics } from "@vercel/analytics/react"
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
                 &copy; 2024 Olympic Body Explorer. All rights reserved.
             </div>
         </footer>
+        <Analytics />
         </body>
         </html>
     );
