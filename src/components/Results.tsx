@@ -6,7 +6,7 @@ import { Scatter } from 'react-chartjs-2';
 import { UserMeasurements, SportData } from '../utils/types';
 import { calculateCompatibility } from '../utils/calculations';
 import SocialShare from './SocialShare';
-import AnimatedSilhouette from './AnimatedSilhoutte';
+import TimeTravel from './TimeTravel';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -87,8 +87,7 @@ export default function Results({ measurements }: ResultsProps) {
             className="mt-8 bg-white rounded-lg shadow-lg p-6"
         >
             <h2 className="text-3xl font-bold mb-6 text-center text-olympic-blue">Your Results</h2>
-            <AnimatedSilhouette measurements={measurements} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Top 5 Compatible Sports</h3>
                     <ul>
@@ -121,6 +120,7 @@ export default function Results({ measurements }: ResultsProps) {
                     <Scatter data={scatterData} options={scatterOptions} />
                 </div>
             </div>
+            <TimeTravel measurements={measurements} />
             <div className="mt-8">
                 <h3 className="text-2xl font-semibold mb-4 text-center text-olympic-blue">Share Your Results</h3>
                 <SocialShare
