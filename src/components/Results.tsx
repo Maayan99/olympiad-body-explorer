@@ -6,6 +6,7 @@ import { Scatter } from 'react-chartjs-2';
 import { UserMeasurements, SportData } from '../utils/types';
 import { calculateCompatibility } from '../utils/calculations';
 import SocialShare from './SocialShare';
+import AnimatedSilhouette from './AnimatedSilhouette';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -15,15 +16,16 @@ interface ResultsProps {
 
 export default function Results({ measurements }: ResultsProps) {
     const [compatibleSports, setCompatibleSports] = useState<{ sport: SportData; compatibility: number }[]>([]);
+    const [allSports, setAllSports] = useState<SportData[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
             const res = await fetch('/api/athleteData');
             const data: SportData[] = await res.json();
+            setAllSports(data);
             const sortedSports = calculateCompatibility(measurements, data)
-                .sort((a, b) => b.compatibility - a.compatibility)
-                .slice(0, 5);
+                .sort((a, b) => b.compatibility - a.compatibility);
             setCompatibleSports(sortedSports);
             setLoading(false);
         }
@@ -39,12 +41,16 @@ export default function Results({ measurements }: ResultsProps) {
             {
                 label: 'Your Measurements',
                 data: [{ x: measurements.height, y: measurements.weight }],
-                backgroundColor: 'rgba(0, 129, 200, 1)', // Olympic blue
+                backgroundColor: 'rgba(255, 0, 0, 1)', // Red for user
+                pointRadius: 8,
             },
-            ...compatibleSports.map((sport, index) => ({
-                label: sport.sport.name,
-                data: [{ x: sport.sport.averageHeight, y: sport.sport.averageWeight }],
-                backgroundColor: `rgba(${index * 50}, 129, 200, 0.7)`,
+            ...allSports.map((sport, index) => ({
+                label: sport.name,
+                data: [{ x: sport.averageHeight, y: sport.averageWeight }],
+                backgroundColor: compatibleSports.findIndex(s => s.sport.name === sport.name) < 5
+                    ? 'rgba(0, 129, 200, 1)' // Olympic blue for top 5
+                    : 'rgba(200, 200, 200, 0.5)', // Gray for others
+                pointRadius: compatibleSports.findIndex(s => s.sport.name === sport.name) < 5 ? 6 : 4,
             })),
         ],
     };
@@ -81,11 +87,12 @@ export default function Results({ measurements }: ResultsProps) {
             className="mt-8 bg-white rounded-lg shadow-lg p-6"
         >
             <h2 className="text-3xl font-bold mb-6 text-center text-olympic-blue">Your Results</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <AnimatedSilhouette measurements={measurements} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                 <div>
                     <h3 className="text-2xl font-semibold mb-4 text-olympic-blue">Top 5 Compatible Sports</h3>
                     <ul>
-                        {compatibleSports.map(({ sport, compatibility }, index) => (
+                        {compatibleSports.slice(0, 5).map(({ sport, compatibility }, index) => (
                             <motion.li
                                 key={sport.name}
                                 className="mb-4 p-4 bg-gray-50 rounded-md shadow-sm"
