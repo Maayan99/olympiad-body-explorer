@@ -71,8 +71,7 @@ export default function Results({ measurements }: ResultsProps) {
     };
 
     const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const shareTitle = `I'm ${(compatibleSports[0].compatibility * 100).toFixed(2)}% compatible with ${compatibleSports[0].sport.name} in the Olympics! Check your match:`;
-    const shareImage = `/api/og?sport=${encodeURIComponent(compatibleSports[0].sport.name)}&compatibility=${(compatibleSports[0].compatibility * 100).toFixed(2)}`;
+    const shareTitle = `Check out my Olympic body type match!`;
 
     return (
         <motion.div
@@ -117,7 +116,12 @@ export default function Results({ measurements }: ResultsProps) {
             </div>
             <div className="mt-8">
                 <h3 className="text-2xl font-semibold mb-4 text-center text-olympic-blue">Share Your Results</h3>
-                <SocialShare url={shareUrl} title={shareTitle} image={shareImage} />
+                <SocialShare
+                    url={shareUrl}
+                    title={shareTitle}
+                    sport={compatibleSports[0].sport.name}
+                    compatibility={compatibleSports[0].compatibility * 100}
+                />
             </div>
         </motion.div>
     );
